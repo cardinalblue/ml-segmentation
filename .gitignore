@@ -1,7 +1,7 @@
-nginx.conf.compiled
-client_body_temp/
-fastcgi_temp/
-logs/
-proxy_temp/
-scgi_temp/
-uwsgi_temp/
+lua-server/nginx.conf.compiled
+lua-server/client_body_temp/
+lua-server/fastcgi_temp/
+lua-server/logs/
+lua-server/proxy_temp/
+lua-server/scgi_temp/
+lua-server/uwsgi_temp/
