@@ -41,8 +41,10 @@ app:post('/convert', function(self)
 	tmp:write(file.content)
 	tmp:close()
 
+	-- Do conversion
 	os.execute("sips -Z " .. size .. " " .. tmpname)
 
+	-- Read and send
 	local tmp = io.open(tmpname, 'r')
 	return tmp:read('*all'), { content_type = 'image/jpeg', layout = false }
 end)
