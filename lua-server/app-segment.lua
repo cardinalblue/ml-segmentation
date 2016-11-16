@@ -3,9 +3,7 @@ local util  	 		= require("lapis.util")
 local validate 		= require("lapis.validate")
 local app_helpers = require("lapis.application")
 
-local app = lapis.Application()
-app:enable 'etlua'
-app.layout = require 'views.layout'
+return function(app)
 
 -- ============================================================================
 app:get("/", function()
@@ -34,5 +32,5 @@ app:post('/segment', app_helpers.capture_errors({ function(self)
 	end
 }) )
 
-return app
+end
 

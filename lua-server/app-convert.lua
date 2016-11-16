@@ -3,23 +3,11 @@ local util  	 		= require("lapis.util")
 local validate 		= require("lapis.validate")
 local app_helpers = require("lapis.application")
 
-local app = lapis.Application()
-app:enable 'etlua'
-app.layout = require 'views.layout'
-
+return function(app)
+	
 -- ============================================================================
-app:get("/", function()
-  return "Welcome to Lapis " .. require("lapis.version")
-end)
-
 app:get('/form-convert', function()
 	return { render = 'form-convert' }
-end)
-
-app:get('/cheerbear', function()
-	f = io.open('./DATA/cheerbear.jpg', 'r')
-	local data = f:read('*all')
-	return data, { content_type = 'image/jpeg', layout = false }
 end)
 
 -- ============================================================================
@@ -53,5 +41,4 @@ end
 
 -- ============================================================================
 
-
-return app
+end
