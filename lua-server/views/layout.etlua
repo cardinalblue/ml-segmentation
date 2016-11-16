@@ -16,7 +16,7 @@
 <body>
 	
 	<div>
-		<% for i, e in pairs(errors) do %>
+		<% for i, e in pairs(errors or {}) do %>
 			<div class="alert alert-danger" role="alert">
 			  <%= e %>
 			</div>			

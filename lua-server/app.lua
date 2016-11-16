@@ -7,13 +7,13 @@ local app = lapis.Application()
 app:enable 'etlua'
 app.layout = require 'views.layout'
 
-
+-- ============================================================================
 app:get("/", function()
   return "Welcome to Lapis " .. require("lapis.version")
 end)
 
-app:get('/form', function()
-	return { render = 'form' }
+app:get('/form-convert', function()
+	return { render = 'form-convert' }
 end)
 
 app:get('/cheerbear', function()
@@ -22,6 +22,7 @@ app:get('/cheerbear', function()
 	return data, { content_type = 'image/jpeg', layout = false }
 end)
 
+-- ============================================================================
 app:post('/convert', app_helpers.capture_errors({ function(self)
 
   validate.assert_valid(self.params, {
@@ -46,8 +47,11 @@ app:post('/convert', app_helpers.capture_errors({ function(self)
 end, 
 on_error = function(self) 
 	print('errors => ' .. util.to_json(self.errors))
-	return { render = 'form' }
+	return { render = 'form-convert' }
 end
 }) )
+
+-- ============================================================================
+
 
 return app
