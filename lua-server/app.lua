@@ -22,20 +22,16 @@ app:get('/cheerbear', function()
 	return data, { content_type = 'image/jpeg', layout = false }
 end)
 
-app:post('/convert', function(self)
+app:post('/convert', app_helpers.capture_errors({ function(self)
 
-	-- Requested size
   validate.assert_valid(self.params, {
-    { "size", is_integer = true }
+    { "uploaded_file", is_file = true, 'Must provide a file' },
+		{ 'size', is_integer = true, 'Must provide a valid size' }
   })
 	local size = self.params.size
-	print('/convert headers=' .. util.to_json(self.req.headers))
+	local file = self.params.uploaded_file
 
 	-- Uploaded file
-  validate.assert_valid(self.params, {
-    { "uploaded_file", is_file = true }
-  })
-	local file = self.params.uploaded_file
 	local tmpname = os.tmpname()
 	local tmp = io.open(tmpname, 'w')
 	tmp:write(file.content)
@@ -47,6 +43,11 @@ app:post('/convert', function(self)
 	-- Read and send
 	local tmp = io.open(tmpname, 'r')
 	return tmp:read('*all'), { content_type = 'image/jpeg', layout = false }
-end)
+end, 
+on_error = function(self) 
+	print('errors => ' .. util.to_json(self.errors))
+	return { render = 'form' }
+end
+}) )
 
 return app

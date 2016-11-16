@@ -10,7 +10,17 @@
 
 <body>
 	
+	<div>
+		<% for i, e in pairs(errors) do %>
+			<div class="alert alert-danger" role="alert">
+			  <%= e %>
+			</div>			
+		<% end %>
+	</div>
+
+	<div>
 	<% content_for "inner" %>
+	</div>
 	
 </body>
 </html>
