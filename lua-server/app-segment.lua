@@ -21,7 +21,7 @@ local config = {
 -- ============================================================================
 
 function get_model_path()
-	local deepmask_path = os.gentenv('DEEPMASK')
+	local deepmask_path = os.getenv('DEEPMASK')
 	if (config.dm) then
 		return deepmask_path .. '/pretrained/deepmask'
 	else
@@ -32,7 +32,7 @@ end
 
 function get_infer()
 
-	if !os.gentenv('DEEPMASK') then
+	if !os.getenv('DEEPMASK') then
 		
 		-- Mock for testing of the infer object
 		return {
