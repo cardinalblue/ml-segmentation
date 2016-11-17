@@ -9,7 +9,6 @@ require 'image'
 local coco  = require 'coco'
 
 local config = {
-	model		= 
 	gpu  		= 1,
 	np			= 5,				-- Number of proposals
 	si			= -2.5,			-- Initial scale
@@ -32,7 +31,7 @@ end
 
 function get_infer()
 
-	if !os.getenv('DEEPMASK') then
+	if not os.getenv('DEEPMASK') then
 		
 		-- Mock for testing of the infer object
 		return {
