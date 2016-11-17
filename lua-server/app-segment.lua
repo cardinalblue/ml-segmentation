@@ -96,7 +96,7 @@ end
 
 -- Note: returns the tmp file's NAME
 function tmp_with_content(content)
-	local filename = os.tmpfile()
+	local filename = os.tmpname()
 	local f = io.open(filename, 'wb')
 	f:write(content)
 	f:close()
@@ -139,8 +139,8 @@ app:post('/segment', app_helpers.capture_errors({ function(self)
 
 	-- Draw out the masks
 	local outimg = img:clone()
-	coco.maskApi.drawMasks(outimg, masks, 10)
-	local outtmp = os.tmpfile()
+	coco.MaskApi.drawMasks(outimg, masks, 10)
+	local outtmp = os.tmpname()
 	image.saveJPG(outtmp, outimg)
 	local outdata = io.open(outtmp, 'rb'):read('*all')
 
