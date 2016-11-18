@@ -52,19 +52,19 @@ function deepmask_setup_create()
 	model:inference(config.np)
 	model:cuda()
 
-  if torch.type(model)=='nn.DeepMask' then
-    paths.dofile(deepmask_path .. '/InferDeepMask.lua')
-  elseif torch.type(model)=='nn.SharpMask' then
-    paths.dofile(deepmask_path .. '/InferSharpMask.lua')
-  end
-
   -- create inference module
 	local scales = {}
 	for i = config.si, config.sf, config.ss do
 		table.insert(scales, 2^i)
 	end
 
-	return {
+  if torch.type(model)=='nn.DeepMask' then
+    paths.dofile(deepmask_path .. '/InferDeepMask.lua')
+  elseif torch.type(model)=='nn.SharpMask' then
+    paths.dofile(deepmask_path .. '/InferSharpMask.lua')
+  end
+
+  return {
 		scales 	= scales,
 		meanstd = {
       mean = { 0.485, 0.456, 0.406 },
