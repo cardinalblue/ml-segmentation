@@ -28,6 +28,55 @@ function get_model_path()
   end
 end
 
+function deepmask_setup_create()
+
+	require 'torch'
+	require 'cutorch'
+
+	print('>>>> Configuring Torch')
+	torch.setdefaulttensortype('torch.FloatTensor')
+	cutorch.setDevice(config.gpu)
+	local meanstd = {
+		mean = { 0.485, 0.456, 0.406 },
+		std =  { 0.229, 0.224, 0.225 }
+	}
+
+	-- Load model
+	print('>>>> Loading models...')
+	paths.dofile('DeepMask.lua')
+	paths.dofile('SharpMask.lua')
+
+	print('>>>> Loading model file... ' .. get_model_path())
+	local m = torch.load(get_model_path() .. '/model.t7')
+	local model = m.model
+	model:inference(config.np)
+	model:cuda()
+
+	-- create inference module
+	local scales = {}
+	for i = config.si, config.sf, config.ss do
+		table.insert(scales, 2^i)
+	end
+
+	if torch.type(model)=='nn.DeepMask' then
+		paths.dofile('InferDeepMask.lua')
+	elseif torch.type(model)=='nn.SharpMask' then
+		paths.dofile('InferSharpMask.lua')
+	end
+
+	return {
+		np 			= config.np,
+		scales 	= scales,
+		meanstd = meanstd,
+		model 	= model,
+		dm 			= config.dm,
+	}
+
+end
+
+if not os.getenv('DEEPMASK') then
+	deepmask_setup = deepmask_setup_create()
+end
 
 function get_infer()
 
@@ -48,47 +97,7 @@ function get_infer()
 
   else
 
-    require 'torch'
-    require 'cutorch'
-
-    print('>>>> Configuring Torch')
-    torch.setdefaulttensortype('torch.FloatTensor')
-    cutorch.setDevice(config.gpu)
-    local meanstd = {
-      mean = { 0.485, 0.456, 0.406 },
-      std = { 0.229, 0.224, 0.225 }
-    }
-
-    -- Load model
-    print('>>>> Loading models...')
-    paths.dofile('DeepMask.lua')
-    paths.dofile('SharpMask.lua')
-
-    print('>>>> Loading model file... ' .. get_model_path())
-    local m = torch.load(get_model_path() .. '/model.t7')
-    local model = m.model
-    model:inference(config.np)
-    model:cuda()
-
-    -- create inference module
-    local scales = {}
-    for i = config.si, config.sf, config.ss do
-      table.insert(scales, 2^i)
-    end
-
-    if torch.type(model)=='nn.DeepMask' then
-      paths.dofile('InferDeepMask.lua')
-    elseif torch.type(model)=='nn.SharpMask' then
-      paths.dofile('InferSharpMask.lua')
-    end
-
-    return Infer{
-      np 			= config.np,
-      scales 	= scales,
-      meanstd = meanstd,
-      model 	= model,
-      dm 			= config.dm,
-    }
+    return Infer(deepmask_setup)
 
   end
 
