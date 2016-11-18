@@ -68,6 +68,7 @@ function deepmask_setup_create()
   end
 
   return {
+    klass   = Infer,
 		scales 	= scales,
 		meanstd = {
       mean = { 0.485, 0.456, 0.406 },
@@ -103,7 +104,7 @@ function get_infer()
     }
 
   else
-    return Infer(deepmask_setup)
+    return deepmask_setup.klass(deepmask_setup)
   end
 
 end
