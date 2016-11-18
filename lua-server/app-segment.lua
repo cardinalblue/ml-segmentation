@@ -79,6 +79,10 @@ function deepmask_setup_create()
 
 end
 
+if deepmask_path then
+  deepmask_setup = deepmask_setup_create()
+end
+
 function get_infer()
 
   if not deepmask_path then
@@ -97,9 +101,6 @@ function get_infer()
     }
 
   else
-    if not deepmask_setup then
-      deepmask_setup = deepmask_setup_create()
-    end
     return Infer(deepmask_setup)
   end
 
