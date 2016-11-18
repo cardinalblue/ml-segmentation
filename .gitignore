@@ -5,3 +5,4 @@ lua-server/logs/
 lua-server/proxy_temp/
 lua-server/scgi_temp/
 lua-server/uwsgi_temp/
+.idea/
