@@ -104,7 +104,7 @@ function get_infer()
     }
 
   else
-    return deepmask_setup.klass(deepmask_setup)
+    return deepmask_setup.klass.new(deepmask_setup)
   end
 
 end
