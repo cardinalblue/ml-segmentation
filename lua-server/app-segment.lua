@@ -100,7 +100,7 @@ function get_infer()
     }
 
   else
-
+    print('deepmask_setup=' .. util.to_json(deepmask_setup))
     return Infer(deepmask_setup)
 
   end
