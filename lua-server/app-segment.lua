@@ -103,7 +103,13 @@ function get_infer()
     }
 
   else
-    return Infer.new(deepmask_setup)
+    return Infer.new({
+      scales  = deepmask_setup.scales,
+      meanstd = deepmask_setup.meanstd,
+      model   = deepmask_setup.model,
+      np      = deepmask_setup.np,
+      dm      = deepmask_setup.dm,
+    })
   end
 
 end
