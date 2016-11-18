@@ -4,8 +4,9 @@ local validate 		    = require("lapis.validate")
 local app_helpers     = require("lapis.application")
 local server_config   = require("lapis.config").get()
 if server_config.deepmask then
-  require 'torch'
-  require 'cutorch'
+  torch   = require 'torch'
+  cutorch = require 'cutorch'
+  paths   = require 'paths'
 end
 
 
