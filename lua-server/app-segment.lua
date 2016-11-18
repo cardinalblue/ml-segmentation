@@ -3,6 +3,10 @@ local util  	 		    = require("lapis.util")
 local validate 		    = require("lapis.validate")
 local app_helpers     = require("lapis.application")
 local server_config   = require("lapis.config").get()
+if server_config.deepmask then
+  require 'torch'
+  require 'cutorch'
+end
 
 
 
@@ -33,9 +37,6 @@ function get_model_path()
 end
 
 function deepmask_setup_create()
-
-	require 'torch'
-	require 'cutorch'
 
 	print('>>>> Configuring Torch')
 	torch.setdefaulttensortype('torch.FloatTensor')
