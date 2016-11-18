@@ -79,6 +79,7 @@ function deepmask_setup_create()
 
 end
 
+deepmask_setup = nil
 if deepmask_path then
   deepmask_setup = deepmask_setup_create()
 end
