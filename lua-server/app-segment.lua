@@ -1,7 +1,10 @@
-local lapis 	 		= require("lapis")
-local util  	 		= require("lapis.util")
-local validate 		= require("lapis.validate")
-local app_helpers = require("lapis.application")
+local lapis 	 		    = require("lapis")
+local util  	 		    = require("lapis.util")
+local validate 		    = require("lapis.validate")
+local app_helpers     = require("lapis.application")
+local server_config   = require("lapis.config").get()
+
+
 
 -- ============================================================================
 
@@ -19,8 +22,9 @@ local config = {
 
 -- ============================================================================
 
+local deepmask_path = server_config.deepmask
+
 function get_model_path()
-  local deepmask_path = os.getenv('DEEPMASK')
   if (config.dm) then
     return deepmask_path .. '/pretrained/deepmask'
   else
@@ -43,8 +47,8 @@ function deepmask_setup_create()
 
 	-- Load model
 	print('>>>> Loading models...')
-	paths.dofile('DeepMask.lua')
-	paths.dofile('SharpMask.lua')
+	paths.dofile(deepmask_path .. '/DeepMask.lua')
+	paths.dofile(deepmask_path .. '/SharpMask.lua')
 
 	print('>>>> Loading model file... ' .. get_model_path())
 	local m = torch.load(get_model_path() .. '/model.t7')
@@ -59,9 +63,9 @@ function deepmask_setup_create()
 	end
 
 	if torch.type(model)=='nn.DeepMask' then
-		paths.dofile('InferDeepMask.lua')
+		paths.dofile(deepmask_path .. '/InferDeepMask.lua')
 	elseif torch.type(model)=='nn.SharpMask' then
-		paths.dofile('InferSharpMask.lua')
+		paths.dofile(deepmask_path .. '/InferSharpMask.lua')
 	end
 
 	return {
@@ -74,13 +78,13 @@ function deepmask_setup_create()
 
 end
 
-if not os.getenv('DEEPMASK') then
+if deepmask_path then
 	deepmask_setup = deepmask_setup_create()
 end
 
 function get_infer()
 
-  if not os.getenv('DEEPMASK') then
+  if not deepmask_path then
 
     -- Mock for testing of the infer object
     return {
