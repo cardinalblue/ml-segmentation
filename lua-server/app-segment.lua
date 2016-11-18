@@ -40,10 +40,6 @@ function deepmask_setup_create()
 	print('>>>> Configuring Torch')
 	torch.setdefaulttensortype('torch.FloatTensor')
 	cutorch.setDevice(config.gpu)
-	local meanstd = {
-		mean = { 0.485, 0.456, 0.406 },
-		std =  { 0.229, 0.224, 0.225 }
-	}
 
 	-- Load model
 	print('>>>> Loading models...')
@@ -56,30 +52,29 @@ function deepmask_setup_create()
 	model:inference(config.np)
 	model:cuda()
 
-	-- create inference module
+  if torch.type(model)=='nn.DeepMask' then
+    paths.dofile(deepmask_path .. '/InferDeepMask.lua')
+  elseif torch.type(model)=='nn.SharpMask' then
+    paths.dofile(deepmask_path .. '/InferSharpMask.lua')
+  end
+
+  -- create inference module
 	local scales = {}
 	for i = config.si, config.sf, config.ss do
 		table.insert(scales, 2^i)
 	end
 
-	if torch.type(model)=='nn.DeepMask' then
-		paths.dofile(deepmask_path .. '/InferDeepMask.lua')
-	elseif torch.type(model)=='nn.SharpMask' then
-		paths.dofile(deepmask_path .. '/InferSharpMask.lua')
-	end
-
 	return {
-		np 			= config.np,
 		scales 	= scales,
-		meanstd = meanstd,
+		meanstd = {
+      mean = { 0.485, 0.456, 0.406 },
+      std =  { 0.229, 0.224, 0.225 }
+    },
 		model 	= model,
+    np 			= config.np,
 		dm 			= config.dm,
 	}
 
-end
-
-if deepmask_path then
-	deepmask_setup = deepmask_setup_create()
 end
 
 function get_infer()
@@ -100,8 +95,8 @@ function get_infer()
     }
 
   else
-    return Infer(deepmask_setup_create())
-
+    deepmask_setup = deepmask_setup_create or deepmask_setup_create()
+    return Infer(deepmask_setup)
   end
 
 end
