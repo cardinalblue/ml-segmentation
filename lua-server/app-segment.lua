@@ -95,7 +95,9 @@ function get_infer()
     }
 
   else
-    deepmask_setup = deepmask_setup or deepmask_setup_create()
+    if not deepmask_setup then
+      deepmask_setup = deepmask_setup_create()
+    end
     return Infer(deepmask_setup)
   end
 
