@@ -37,6 +37,7 @@ function get_model_path()
   end
 end
 
+Infer = nil
 function deepmask_setup_create()
 
 	print('>>>> Configuring Torch')
@@ -61,9 +62,9 @@ function deepmask_setup_create()
 	end
 
   if torch.type(model)=='nn.DeepMask' then
-    paths.dofile(deepmask_path .. '/InferDeepMask.lua')
+    Infer = paths.dofile(deepmask_path .. '/InferDeepMask.lua')
   elseif torch.type(model)=='nn.SharpMask' then
-    paths.dofile(deepmask_path .. '/InferSharpMask.lua')
+    Infer = paths.dofile(deepmask_path .. '/InferSharpMask.lua')
   end
 
   return {
