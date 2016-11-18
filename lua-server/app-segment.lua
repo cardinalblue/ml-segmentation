@@ -16,13 +16,13 @@ end
 require 'image'
 local coco  = require 'coco'
 
-local config = {
+config = {
   gpu  		= 1,
   np			= 5,				-- Number of proposals
   si			= -2.5,			-- Initial scale
   sf   		= .5,				-- Final scale
   ss			= .5,				-- Scale step
-  dm			= false,		-- Use DeepMask or SharpMask
+  dm			= true,		  -- Use DeepMask or SharpMask
 }
 
 -- ============================================================================
