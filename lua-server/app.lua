@@ -1,7 +1,10 @@
-local lapis 	 		= require("lapis")
-local util  	 		= require("lapis.util")
-local validate 		= require("lapis.validate")
-local app_helpers = require("lapis.application")
+local lapis 	 			= require("lapis")
+local util  	 			= require("lapis.util")
+local validate 			= require("lapis.validate")
+local app_helpers 	= require("lapis.application")
+local server_config = require("lapis.config").get()
+
+print('server_config=' .. util.to_json(server_config))
 
 local app = lapis.Application()
 app:enable 'etlua'
